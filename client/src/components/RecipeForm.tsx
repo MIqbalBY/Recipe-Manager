@@ -76,7 +76,31 @@ export function RecipeForm({ recipe, onSubmit, onCancel, isLoading }: RecipeForm
               id="description"
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
+              placeholder="Brief description of the recipe"
             />
+          </div>
+          
+          <div>
+            <Label htmlFor="image_url">Image URL</Label>
+            <Input
+              id="image_url"
+              value={formData.image_url}
+              onChange={(e) => handleChange('image_url', e.target.value)}
+              placeholder="https://example.com/image.jpg"
+            />
+            {formData.image_url && (
+              <div className="mt-2 w-full h-32 overflow-hidden rounded-md border">
+                <img
+                  src={formData.image_url}
+                  alt="Recipe preview"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = '';
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
           </div>
           
           <div>
@@ -86,6 +110,7 @@ export function RecipeForm({ recipe, onSubmit, onCancel, isLoading }: RecipeForm
               className="w-full min-h-[100px] p-2 border rounded-md resize-none"
               value={formData.ingredients}
               onChange={(e) => handleChange('ingredients', e.target.value)}
+              placeholder="List ingredients separated by commas or on new lines"
               required
             />
           </div>
@@ -97,6 +122,7 @@ export function RecipeForm({ recipe, onSubmit, onCancel, isLoading }: RecipeForm
               className="w-full min-h-[120px] p-2 border rounded-md resize-none"
               value={formData.instructions}
               onChange={(e) => handleChange('instructions', e.target.value)}
+              placeholder="Write step-by-step instructions. Use numbered steps (1. 2. 3.) for better formatting."
               required
             />
           </div>
@@ -107,6 +133,7 @@ export function RecipeForm({ recipe, onSubmit, onCancel, isLoading }: RecipeForm
               <Input
                 id="prep_time"
                 type="number"
+                min="0"
                 value={formData.prep_time}
                 onChange={(e) => handleChange('prep_time', e.target.value)}
               />
@@ -116,6 +143,7 @@ export function RecipeForm({ recipe, onSubmit, onCancel, isLoading }: RecipeForm
               <Input
                 id="cook_time"
                 type="number"
+                min="0"
                 value={formData.cook_time}
                 onChange={(e) => handleChange('cook_time', e.target.value)}
               />
@@ -128,6 +156,7 @@ export function RecipeForm({ recipe, onSubmit, onCancel, isLoading }: RecipeForm
               <Input
                 id="servings"
                 type="number"
+                min="1"
                 value={formData.servings}
                 onChange={(e) => handleChange('servings', e.target.value)}
               />
@@ -153,15 +182,7 @@ export function RecipeForm({ recipe, onSubmit, onCancel, isLoading }: RecipeForm
               id="category"
               value={formData.category}
               onChange={(e) => handleChange('category', e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="image_url">Image URL</Label>
-            <Input
-              id="image_url"
-              value={formData.image_url}
-              onChange={(e) => handleChange('image_url', e.target.value)}
+              placeholder="e.g., Italian, Dessert, Appetizer"
             />
           </div>
           

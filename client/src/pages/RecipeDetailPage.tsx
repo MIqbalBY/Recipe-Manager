@@ -38,6 +38,24 @@ export function RecipeDetailPage({ recipeId, onBack, onEdit, onDelete }: RecipeD
     }
   };
 
+  const formatInstructionsAsList = (instructions: string) => {
+    const steps = instructions.split(/\d+\.\s+/).filter(step => step.trim());
+    return steps.map((step, index) => (
+      <li key={index} className="mb-2 text-sm leading-relaxed">
+        {step.trim()}
+      </li>
+    ));
+  };
+
+  const formatIngredientsAsList = (ingredients: string) => {
+    const items = ingredients.split(',').map(item => item.trim());
+    return items.map((item, index) => (
+      <li key={index} className="mb-1 text-sm">
+        {item}
+      </li>
+    ));
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
@@ -123,6 +141,19 @@ export function RecipeDetailPage({ recipeId, onBack, onEdit, onDelete }: RecipeD
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
+          {recipe.image_url && (
+            <div className="w-full h-64 md:h-80 overflow-hidden rounded-lg">
+              <img
+                src={recipe.image_url}
+                alt={recipe.title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            </div>
+          )}
+          
           <div className="flex flex-wrap gap-4 text-sm">
             {recipe.prep_time && (
               <div className="flex items-center gap-1">
@@ -165,18 +196,18 @@ export function RecipeDetailPage({ recipeId, onBack, onEdit, onDelete }: RecipeD
             <div>
               <h3 className="text-lg font-semibold mb-3">Ingredients</h3>
               <div className="bg-muted p-4 rounded-md">
-                <div className="whitespace-pre-line text-sm">
-                  {recipe.ingredients}
-                </div>
+                <ul className="space-y-1">
+                  {formatIngredientsAsList(recipe.ingredients)}
+                </ul>
               </div>
             </div>
 
             <div>
               <h3 className="text-lg font-semibold mb-3">Instructions</h3>
               <div className="bg-muted p-4 rounded-md">
-                <div className="whitespace-pre-line text-sm">
-                  {recipe.instructions}
-                </div>
+                <ol className="list-decimal list-inside space-y-2">
+                  {formatInstructionsAsList(recipe.instructions)}
+                </ol>
               </div>
             </div>
           </div>

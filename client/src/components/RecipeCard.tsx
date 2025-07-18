@@ -19,7 +19,19 @@ export function RecipeCard({ recipe, onFavoriteToggle, onView }: RecipeCardProps
   };
 
   return (
-    <Card className="h-full hover:shadow-lg transition-shadow">
+    <Card className="h-full hover:shadow-lg transition-shadow overflow-hidden">
+      {recipe.image_url && (
+        <div className="h-48 overflow-hidden">
+          <img
+            src={recipe.image_url}
+            alt={recipe.title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </div>
+      )}
       <CardHeader className="pb-4">
         <div className="flex justify-between items-start">
           <CardTitle className="text-lg line-clamp-2">{recipe.title}</CardTitle>
