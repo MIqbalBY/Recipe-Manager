@@ -26,6 +26,22 @@ export function SearchFilters({
   onClear,
   categories
 }: SearchFiltersProps) {
+  const handleCategoryChange = (value: string) => {
+    if (value === 'clear') {
+      onCategoryChange('');
+    } else {
+      onCategoryChange(value);
+    }
+  };
+
+  const handleDifficultyChange = (value: string) => {
+    if (value === 'clear') {
+      onDifficultyChange('');
+    } else {
+      onDifficultyChange(value);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -48,12 +64,12 @@ export function SearchFilters({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="category">Category</Label>
-            <Select value={category} onValueChange={onCategoryChange}>
+            <Select value={category || undefined} onValueChange={handleCategoryChange}>
               <SelectTrigger>
                 <SelectValue placeholder="All categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All categories</SelectItem>
+                <SelectItem value="clear">All categories</SelectItem>
                 {categories.map((cat) => (
                   <SelectItem key={cat} value={cat}>
                     {cat}
@@ -65,12 +81,12 @@ export function SearchFilters({
           
           <div>
             <Label htmlFor="difficulty">Difficulty</Label>
-            <Select value={difficulty} onValueChange={onDifficultyChange}>
+            <Select value={difficulty || undefined} onValueChange={handleDifficultyChange}>
               <SelectTrigger>
                 <SelectValue placeholder="All difficulties" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All difficulties</SelectItem>
+                <SelectItem value="clear">All difficulties</SelectItem>
                 <SelectItem value="Easy">Easy</SelectItem>
                 <SelectItem value="Medium">Medium</SelectItem>
                 <SelectItem value="Hard">Hard</SelectItem>
