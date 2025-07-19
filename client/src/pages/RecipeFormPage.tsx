@@ -22,22 +22,29 @@ export function RecipeFormPage({ recipeId, onBack, onSuccess }: RecipeFormPagePr
       const url = recipeId ? `/api/recipes/${recipeId}` : '/api/recipes';
       const method = recipeId ? 'PUT' : 'POST';
       
+      const token = localStorage.getItem('auth_token');
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json'
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       const response = await fetch(url, {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save recipe');
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save recipe');
       }
 
       onSuccess();
     } catch (error) {
       console.error('Error saving recipe:', error);
-      alert('Failed to save recipe. Please try again.');
+      alert(error instanceof Error ? error.message : 'Failed to save recipe. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

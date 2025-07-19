@@ -11,7 +11,13 @@ export function useRecipe(id: number | string) {
       setLoading(true);
       setError(null);
       
-      const response = await fetch(`/api/recipes/${id}`);
+      const token = localStorage.getItem('auth_token');
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      const response = await fetch(`/api/recipes/${id}`, { headers });
       if (!response.ok) {
         if (response.status === 404) {
           throw new Error('Recipe not found');

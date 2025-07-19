@@ -31,7 +31,13 @@ export function RecipeListPage({ onCreateRecipe, onViewRecipe, showFavorites }: 
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories');
+      const token = localStorage.getItem('auth_token');
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      const response = await fetch('/api/categories', { headers });
       if (response.ok) {
         const data = await response.json();
         setCategories(data);
@@ -43,8 +49,15 @@ export function RecipeListPage({ onCreateRecipe, onViewRecipe, showFavorites }: 
 
   const handleFavoriteToggle = async (id: number) => {
     try {
+      const token = localStorage.getItem('auth_token');
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       await fetch(`/api/recipes/${id}/favorite`, {
-        method: 'PATCH'
+        method: 'PATCH',
+        headers
       });
       refetch();
     } catch (error) {

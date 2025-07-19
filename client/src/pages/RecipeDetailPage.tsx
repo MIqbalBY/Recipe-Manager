@@ -18,8 +18,15 @@ export function RecipeDetailPage({ recipeId, onBack, onEdit, onDelete }: RecipeD
 
   const handleFavoriteToggle = async () => {
     try {
+      const token = localStorage.getItem('auth_token');
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       await fetch(`/api/recipes/${recipeId}/favorite`, {
-        method: 'PATCH'
+        method: 'PATCH',
+        headers
       });
       refetch();
     } catch (error) {
@@ -29,8 +36,15 @@ export function RecipeDetailPage({ recipeId, onBack, onEdit, onDelete }: RecipeD
 
   const handleDelete = async () => {
     try {
+      const token = localStorage.getItem('auth_token');
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       await fetch(`/api/recipes/${recipeId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers
       });
       onDelete(recipeId);
     } catch (error) {
@@ -77,6 +91,9 @@ export function RecipeDetailPage({ recipeId, onBack, onEdit, onDelete }: RecipeD
     );
   }
 
+  const token = localStorage.getItem('auth_token');
+  const canEdit = token && recipe.user_id; // Can edit if authenticated and recipe has user_id
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -85,42 +102,48 @@ export function RecipeDetailPage({ recipeId, onBack, onEdit, onDelete }: RecipeD
           Back to Recipes
         </Button>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleFavoriteToggle}>
-            <Heart
-              className={`h-4 w-4 mr-2 ${
-                recipe.is_favorite ? 'fill-red-500 text-red-500' : ''
-              }`}
-            />
-            {recipe.is_favorite ? 'Remove from Favorites' : 'Add to Favorites'}
-          </Button>
-          <Button variant="outline" onClick={() => onEdit(recipe.id)}>
-            <Edit className="h-4 w-4 mr-2" />
-            Edit
-          </Button>
-          <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" className="text-red-600 hover:text-red-700">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
+          {token && (
+            <Button variant="outline" onClick={handleFavoriteToggle}>
+              <Heart
+                className={`h-4 w-4 mr-2 ${
+                  recipe.is_favorite ? 'fill-red-500 text-red-500' : ''
+                }`}
+              />
+              {recipe.is_favorite ? 'Remove from Favorites' : 'Add to Favorites'}
+            </Button>
+          )}
+          {canEdit && (
+            <>
+              <Button variant="outline" onClick={() => onEdit(recipe.id)}>
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
               </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Delete Recipe</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to delete "{recipe.title}"? This action cannot be undone.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button variant="destructive" onClick={handleDelete}>
-                  Delete Recipe
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="text-red-600 hover:text-red-700">
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Delete Recipe</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to delete "{recipe.title}"? This action cannot be undone.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button variant="destructive" onClick={handleDelete}>
+                      Delete Recipe
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
         </div>
       </div>
 

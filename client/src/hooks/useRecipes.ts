@@ -24,7 +24,13 @@ export function useRecipes(params: UseRecipesParams = {}) {
       if (params.difficulty) searchParams.append('difficulty', params.difficulty);
       if (params.favorites) searchParams.append('favorites', 'true');
       
-      const response = await fetch(`/api/recipes?${searchParams}`);
+      const token = localStorage.getItem('auth_token');
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      const response = await fetch(`/api/recipes?${searchParams}`, { headers });
       if (!response.ok) throw new Error('Failed to fetch recipes');
       
       const data = await response.json();

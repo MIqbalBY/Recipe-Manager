@@ -3,10 +3,13 @@ import { Layout } from '@/components/Layout';
 import { RecipeListPage } from '@/pages/RecipeListPage';
 import { RecipeDetailPage } from '@/pages/RecipeDetailPage';
 import { RecipeFormPage } from '@/pages/RecipeFormPage';
+import { AuthProvider } from '@/components/AuthProvider';
+import { useAuth } from '@/hooks/useAuth';
 
 type Page = 'recipes' | 'favorites' | 'create' | 'edit' | 'detail';
 
-function App() {
+function AppContent() {
+  const { auth, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState<Page>('recipes');
   const [selectedRecipeId, setSelectedRecipeId] = useState<number | null>(null);
 
@@ -44,6 +47,14 @@ function App() {
     setCurrentPage('recipes');
     setSelectedRecipeId(null);
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
 
   const renderPage = () => {
     switch (currentPage) {
@@ -96,6 +107,14 @@ function App() {
     <Layout currentPage={currentPage} onPageChange={handlePageChange}>
       {renderPage()}
     </Layout>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
