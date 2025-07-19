@@ -42,8 +42,10 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
 
   return (
     <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>Sign In</CardTitle>
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Welcome Back
+        </CardTitle>
         <CardDescription>
           Sign in to your account to manage your recipes
         </CardDescription>
@@ -51,13 +53,15 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md">
+            <div className="text-red-500 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
               {error}
             </div>
           )}
           
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
+              Email
+            </Label>
             <Input
               id="email"
               type="email"
@@ -65,12 +69,15 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
               onChange={(e) => handleChange('email', e.target.value)}
               required
               placeholder="your@email.com"
+              className="mt-1 bg-white/50 dark:bg-white/10 border-white/20 focus:border-primary/50"
             />
           </div>
           
           <div>
-            <Label htmlFor="password">Password</Label>
-            <div className="relative">
+            <Label htmlFor="password" className="text-gray-700 dark:text-gray-300">
+              Password
+            </Label>
+            <div className="relative mt-1">
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
@@ -78,6 +85,7 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
                 onChange={(e) => handleChange('password', e.target.value)}
                 required
                 placeholder="Enter your password"
+                className="pr-10 bg-white/50 dark:bg-white/10 border-white/20 focus:border-primary/50"
               />
               <Button
                 type="button"
@@ -91,14 +99,22 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
             </div>
           </div>
           
-          <div className="space-y-2">
-            <Button type="submit" disabled={loading} className="w-full">
+          <div className="space-y-3">
+            <Button 
+              type="submit" 
+              disabled={loading} 
+              className="w-full hover:scale-[1.02] transition-transform"
+            >
               {loading ? 'Signing In...' : 'Sign In'}
             </Button>
             
-            <div className="text-center text-sm text-muted-foreground">
+            <div className="text-center text-sm text-gray-600 dark:text-gray-400">
               Don't have an account?{' '}
-              <Button variant="link" onClick={onToggleMode} className="p-0">
+              <Button 
+                variant="link" 
+                onClick={onToggleMode} 
+                className="p-0 text-primary hover:text-primary/80"
+              >
                 Sign up
               </Button>
             </div>
