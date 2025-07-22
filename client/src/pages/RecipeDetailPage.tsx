@@ -52,22 +52,36 @@ export function RecipeDetailPage({ recipeId, onBack, onEdit, onDelete }: RecipeD
     }
   };
 
-  const formatInstructionsAsList = (instructions: string) => {
-    const steps = instructions.split(/\d+\.\s+/).filter(step => step.trim());
-    return steps.map((step, index) => (
-      <li key={index} className="mb-2 text-sm leading-relaxed">
-        {step.trim()}
-      </li>
-    ));
+  const formatIngredientsAsList = (ingredients: string) => {
+    if (!ingredients.trim()) return null;
+    
+    const lines = ingredients.split('\n').filter(line => line.trim());
+    
+    return (
+      <ul className="list-disc list-inside space-y-1">
+        {lines.map((line, index) => (
+          <li key={index} className="text-sm leading-relaxed">
+            {line.trim()}
+          </li>
+        ))}
+      </ul>
+    );
   };
 
-  const formatIngredientsAsList = (ingredients: string) => {
-    const items = ingredients.split(',').map(item => item.trim());
-    return items.map((item, index) => (
-      <li key={index} className="mb-1 text-sm">
-        {item}
-      </li>
-    ));
+  const formatInstructionsAsList = (instructions: string) => {
+    if (!instructions.trim()) return null;
+    
+    const lines = instructions.split('\n').filter(line => line.trim());
+    
+    return (
+      <ol className="list-decimal list-inside space-y-2">
+        {lines.map((line, index) => (
+          <li key={index} className="text-sm leading-relaxed">
+            {line.trim()}
+          </li>
+        ))}
+      </ol>
+    );
   };
 
   if (loading) {
@@ -219,18 +233,14 @@ export function RecipeDetailPage({ recipeId, onBack, onEdit, onDelete }: RecipeD
             <div>
               <h3 className="text-lg font-semibold mb-3">Ingredients</h3>
               <div className="bg-muted p-4 rounded-md">
-                <ul className="space-y-1">
-                  {formatIngredientsAsList(recipe.ingredients)}
-                </ul>
+                {formatIngredientsAsList(recipe.ingredients)}
               </div>
             </div>
 
             <div>
               <h3 className="text-lg font-semibold mb-3">Instructions</h3>
               <div className="bg-muted p-4 rounded-md">
-                <ol className="list-decimal list-inside space-y-2">
-                  {formatInstructionsAsList(recipe.instructions)}
-                </ol>
+                {formatInstructionsAsList(recipe.instructions)}
               </div>
             </div>
           </div>
