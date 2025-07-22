@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { SmartTextarea } from '@/components/SmartTextarea';
 
 interface RecipeFormProps {
   recipe?: Recipe;
@@ -103,29 +104,27 @@ export function RecipeForm({ recipe, onSubmit, onCancel, isLoading }: RecipeForm
             )}
           </div>
           
-          <div>
-            <Label htmlFor="ingredients">Ingredients *</Label>
-            <textarea
-              id="ingredients"
-              className="w-full min-h-[100px] px-3 py-2 text-base md:text-sm rounded-lg border border-input bg-white/50 dark:bg-white/10 backdrop-blur-sm shadow-sm transition-all placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50 hover:shadow-md resize-none"
-              value={formData.ingredients}
-              onChange={(e) => handleChange('ingredients', e.target.value)}
-              placeholder="List ingredients separated by commas or on new lines"
-              required
-            />
-          </div>
+          <SmartTextarea
+            id="ingredients"
+            label="Ingredients"
+            value={formData.ingredients}
+            onChange={(value) => handleChange('ingredients', value)}
+            placeholder="Enter each ingredient on a new line"
+            required
+            listType="ul"
+            minHeight="100px"
+          />
           
-          <div>
-            <Label htmlFor="instructions">Instructions *</Label>
-            <textarea
-              id="instructions"
-              className="w-full min-h-[120px] px-3 py-2 text-base md:text-sm rounded-lg border border-input bg-white/50 dark:bg-white/10 backdrop-blur-sm shadow-sm transition-all placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50 hover:shadow-md resize-none"
-              value={formData.instructions}
-              onChange={(e) => handleChange('instructions', e.target.value)}
-              placeholder="Write step-by-step instructions. Use numbered steps (1. 2. 3.) for better formatting."
-              required
-            />
-          </div>
+          <SmartTextarea
+            id="instructions"
+            label="Instructions"
+            value={formData.instructions}
+            onChange={(value) => handleChange('instructions', value)}
+            placeholder="Enter each step on a new line"
+            required
+            listType="ol"
+            minHeight="120px"
+          />
           
           <div className="grid grid-cols-2 gap-4">
             <div>
